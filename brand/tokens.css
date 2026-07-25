@@ -4,29 +4,96 @@
  * Greens are sampled from the master logo artwork, NOT from the national brand
  * guide — the two disagree and the logo is what people actually see.
  * Source: logos/master/eckb-melbourne-logo.png, 25/07/2026.
+ *
+ * Every contrast figure below is measured with the WCAG 2.1 relative-luminance
+ * formula. None are estimated. See tokens.json for the full matrix.
  */
 
 :root {
-  /* Primary — 37% of every opaque pixel in the master logo */
+  /* --- grounds ------------------------------------------------------- */
+  --eckb-white: #ffffff;
+  --eckb-paper: #f7f8f4;  /* default light ground — warmer than white */
+  --eckb-night: #0e1a0c;  /* default dark ground — never pure black */
+  --eckb-black: #000000;
+
+  /* --- greens: primary is 37% of every opaque pixel in the master logo */
   --eckb-green: #54b848;
   --eckb-green-rgb: 84, 184, 72;
 
-  /* Same hue (113.6°), darker. Use these for TEXT — see contrast notes. */
+  /* Same hue (113.6°), darker. Use these for TEXT — see pairings below. */
   --eckb-green-mid: #3f8a36;
   --eckb-green-dark: #2a5c24;
   --eckb-green-deep: #152d12;
 
-  --eckb-black: #000000;
-  --eckb-white: #ffffff;
+  /* --- supporting ---------------------------------------------------- */
+  --eckb-ball: #d93b22;   /* live state only: "now", EOI, focus, errors */
+  --eckb-muted: #5b6b57;  /* captions and labels — desaturated green, not grey */
+  --eckb-rule: #c3cdbe;   /* dividers; non-text, contrast floor not applicable */
+
+  /* --- national-guide accents ---------------------------------------- *
+   * The national guide names these for social feed posts. Both are unusable
+   * on the white ground that guide also requires — but on dark they are the
+   * strongest colours available. Kept as accent roles, not discarded.       */
+  --eckb-lime: #c1ff72;   /* 15.20:1 on night · 1.18:1 on white — dark only */
+  --eckb-grass: #7ee957;  /* 11.68:1 on night · 1.54:1 on white — dark only */
 
   /*
-   * Contrast-safe pairings (WCAG 2.1, measured not assumed):
-   *   --eckb-green      on white  2.52:1  FAIL      -> never body text on white
-   *   --eckb-green      on black  8.33:1  AAA       -> good on dark
-   *   --eckb-green-mid  on white  4.29:1  AA-large  -> headings 18pt+/14pt bold
-   *   --eckb-green-dark on white  7.91:1  AAA       -> safe for body text
-   *   --eckb-green-deep on white 14.83:1  AAA
+   * Measured contrast (WCAG 2.1):
+   *                      white   paper    ink     night
+   *   --eckb-green        2.52    2.36    5.88     7.11
+   *   --eckb-green-mid    4.29    4.02    3.46     4.18
+   *   --eckb-green-dark   7.91    7.42    1.87     2.27
+   *   --eckb-green-deep  14.83   13.90    1.00     1.21
+   *   --eckb-ball         4.57    4.28    3.25     3.92
+   *   --eckb-muted        5.70    5.34    2.60     3.15
+   *   --eckb-lime         1.18    1.11   12.58    15.20
+   *   --eckb-grass        1.54    1.44    9.66    11.68
    */
-  --eckb-text-on-white: var(--eckb-green-dark);
-  --eckb-text-on-black: var(--eckb-green);
+
+  /* --- load-bearing pairings ----------------------------------------- *
+   * THE TRAP: white text on --eckb-green is 2.52:1 and FAILS. It looks
+   * correct and it is not. Text on a green fill is always green-deep.      */
+  --eckb-text-on-green: var(--eckb-green-deep);  /* 5.88:1  */
+  --eckb-text-on-light: var(--eckb-green-dark);  /* 7.42:1  */
+  --eckb-text-on-dark:  #dce9d6;                 /* 16.80:1 */
+  --eckb-heading-on-dark: var(--eckb-grass);     /* 11.68:1 */
+
+  /* --- type ----------------------------------------------------------- */
+  --eckb-font: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+               Roboto, Helvetica, Arial, sans-serif;
+  --eckb-wdth-display: 118;
+  --eckb-wdth-stat: 125;
+  --eckb-wdth-heading: 108;
+  --eckb-wdth-body: 100;
+  --eckb-wdth-label: 88;
+  --eckb-measure: 68ch;
+
+  /* --- spacing: one rhythm, more space above a heading than below ----- */
+  --eckb-s1: .5rem;  --eckb-s2: 1rem;  --eckb-s3: 1.5rem;
+  --eckb-s4: 2.5rem; --eckb-s5: 4rem;  --eckb-s6: 6.5rem;
+  --eckb-edge: clamp(1.25rem, 5vw, 5rem);
 }
+
+/* Semantic aliases that flip with the viewer's mode. Use these, not the raw
+   values, anywhere both modes must work. */
+:root {
+  --eckb-ground: var(--eckb-paper);
+  --eckb-text: var(--eckb-green-dark);
+  --eckb-strong: var(--eckb-green-deep);
+  --eckb-line: var(--eckb-rule);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --eckb-ground: var(--eckb-night);
+    --eckb-text: #dce9d6;
+    --eckb-strong: #f2f8ef;
+    --eckb-line: #2e4429;
+    --eckb-muted: #9db096;  /* light-mode muted drops to 3.15:1 on night */
+  }
+}
+
+/*
+ * NOT USABLE IN EMAIL. Mail clients do not support custom properties — inline
+ * the literal hex instead. See the eckb-email skill for the full ruleset.
+ */
