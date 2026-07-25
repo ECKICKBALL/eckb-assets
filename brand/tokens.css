@@ -1,0 +1,32 @@
+/*
+ * Emerald City Kickball — Melbourne brand tokens
+ *
+ * Greens are sampled from the master logo artwork, NOT from the national brand
+ * guide — the two disagree and the logo is what people actually see.
+ * Source: logos/master/eckb-melbourne-logo.png, 25/07/2026.
+ */
+
+:root {
+  /* Primary — 37% of every opaque pixel in the master logo */
+  --eckb-green: #54b848;
+  --eckb-green-rgb: 84, 184, 72;
+
+  /* Same hue (113.6°), darker. Use these for TEXT — see contrast notes. */
+  --eckb-green-mid: #3f8a36;
+  --eckb-green-dark: #2a5c24;
+  --eckb-green-deep: #152d12;
+
+  --eckb-black: #000000;
+  --eckb-white: #ffffff;
+
+  /*
+   * Contrast-safe pairings (WCAG 2.1, measured not assumed):
+   *   --eckb-green      on white  2.52:1  FAIL      -> never body text on white
+   *   --eckb-green      on black  8.33:1  AAA       -> good on dark
+   *   --eckb-green-mid  on white  4.29:1  AA-large  -> headings 18pt+/14pt bold
+   *   --eckb-green-dark on white  7.91:1  AAA       -> safe for body text
+   *   --eckb-green-deep on white 14.83:1  AAA
+   */
+  --eckb-text-on-white: var(--eckb-green-dark);
+  --eckb-text-on-black: var(--eckb-green);
+}
